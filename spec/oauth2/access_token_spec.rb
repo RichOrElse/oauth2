@@ -40,6 +40,10 @@ RSpec.describe AccessToken do
       hash = {:access_token => token, :expires_at => Time.now.to_i + 200, 'foo' => 'bar'}
       target = described_class.from_hash(client, hash)
       assert_initialized_token(target)
+
+      hash = {'accessToken' => token, :expires_at => Time.now.to_i, 'foo' => 'bar' }
+      target = described_class.from_hash(client, hash)
+      assert_initialized_token(target)
     end
 
     it 'from_hash does not modify hash' do

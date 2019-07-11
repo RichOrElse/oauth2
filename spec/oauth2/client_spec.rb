@@ -352,15 +352,17 @@ RSpec.describe OAuth2::Client do
 
   describe '#get_token' do
     it 'returns a configured AccessToken' do
-      client = stubbed_client do |stub|
-        stub.post('/oauth/token') do
-          [200, {'Content-Type' => 'application/json'}, MultiJson.encode('access_token' => 'the-token')]
+      ['access_token', 'accessToken'].each do |token_key|
+        client = stubbed_client do |stub|
+          stub.post('/oauth/token') do
+            [200, {'Content-Type' => 'application/json'}, MultiJson.encode(token_key => 'the-token')]
+          end
         end
-      end
 
-      token = client.get_token({})
-      expect(token).to be_a OAuth2::AccessToken
-      expect(token.token).to eq('the-token')
+        token = client.get_token({})
+        expect(token).to be_a OAuth2::AccessToken
+        expect(token.token).to eq('the-token')
+      end
     end
 
     it 'authenticates with request parameters' do
